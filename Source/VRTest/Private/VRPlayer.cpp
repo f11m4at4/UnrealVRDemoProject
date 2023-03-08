@@ -70,6 +70,7 @@ void AVRPlayer::BeginPlay()
 	{
 		FVector Pos = RightHand->GetRelativeLocation() + RightHand->GetRightVector() * 20 + RightHand->GetForwardVector() * 100 + RightHand->GetUpVector() * -5;
 		RightHand->SetRelativeLocation(Pos);
+		RightAim->SetRelativeLocation(Pos);
 
 		// HMD 연결안돼있을 때는 마우스에 따라서 회전하도록 설정
 		VRCamera->bUsePawnControlRotation = true;
@@ -111,15 +112,16 @@ void AVRPlayer::Tick(float DeltaTime)
 		}
 
 		// 나이아가라 이용해 텔레포트라인 그리기
-		if (TeleportCurveComp)
+		//if (currentTime > niagaraTime)
+		if(TeleportCurveComp)
 		{
-			UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(TeleportCurveComp, FName("User.PointArray"), lines);
+			UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(TeleportCurveComp, FName(TEXT("User.PointArray")), lines);
 		}
 	}
 
 	DrawCrosshair();
 
-	//Grabbing();
+	Grabbing();
 }
 
 // Called to bind functionality to input
@@ -239,6 +241,9 @@ void AVRPlayer::TryGrab()
 		{
 			continue;;
 		}
+		// 물체 잡고 있는 상태로 설정
+		isGrabbing = true;
+
 		// 현재 가장 손과 가까운 위치
 		FVector closestPos = HitObjects[closest].GetActor()->GetActorLocation();
 		float closestDistance = FVector::Dist(closestPos, HandPos);
@@ -252,7 +257,6 @@ void AVRPlayer::TryGrab()
 		{
 			// 가장 가까운 물체 인덱스 교체
 			closest = i;
-			isGrabbing = true;
 		}
 	}
 	
@@ -301,7 +305,6 @@ void AVRPlayer::TryUnGrab()
 	grabbedObject->SetPhysicsAngularVelocityInRadians(angularVelocity, true);
 
 	grabbedObject = nullptr;
-	
 }
 
 void AVRPlayer::Grabbing()
@@ -312,6 +315,12 @@ void AVRPlayer::Grabbing()
 	}
 	// 던질방향
 	throwDirection = RightHand->GetComponentLocation() - prevPos;
+
+	// 쿼터니온 공식
+	// angle1 = Q1, angle2 = Q2
+	// angle1 + angle2 = Q1 * Q2
+	// -angle2 = Quaternion.Inverse(Q2)
+	// angle2 - angle1 = Q2 * prevRot.Inverse(Q1)
 	deltaRotation = RightHand->GetComponentQuat() * prevRot.Inverse();
 	prevPos = RightHand->GetComponentLocation();
 	prevRot = RightHand->GetComponentQuat();

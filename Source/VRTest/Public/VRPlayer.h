@@ -104,6 +104,8 @@ protected: // Teleport UI
 	UPROPERTY(VisibleAnywhere, Category = "TeleportCurveComp")
 	class UNiagaraComponent* TeleportCurveComp;
 
+	//float niagaraTime = .001f;
+	//float currentTime = 0;
 	// Teleport Circle component
 	UPROPERTY(VisibleAnywhere, Category = "TeleportUIComp")
 	class UNiagaraComponent* TeleportCircle;
@@ -157,12 +159,19 @@ private: // Grab
 	UPROPERTY(EditAnywhere, Category = "Grab", Meta = (AllowPrivateAccess = true))
 	float toquePower = 1500;
 
+	// 이전위치
 	FVector prevPos;
+	// 이전회전
 	FQuat prevRot;
+	// 던질 방향
 	FVector throwDirection;
+	// 회전할 방향
 	FQuat deltaRotation;
 
+	// 물체 잡기
 	void TryGrab();
+	// 물체 놓기
 	void TryUnGrab();
+	// 물체 잡은 상태로 컨트롤 하기
 	void Grabbing();
 };
