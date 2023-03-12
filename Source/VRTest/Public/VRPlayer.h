@@ -26,6 +26,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+
 	UPROPERTY(VisibleAnywhere, Category = "VRCamera")
 	class UCameraComponent* VRCamera;
 	UPROPERTY(VisibleAnywhere, Category = "MotionController")
@@ -174,4 +175,8 @@ private: // Grab
 	void TryUnGrab();
 	// 물체 잡은 상태로 컨트롤 하기
 	void Grabbing();
+
+protected:
+	UPROPERTY(VisibleAnywhere, Category = "Widget")
+	class UWidgetInteractionComponent* WidgetInteractionComp;
 };

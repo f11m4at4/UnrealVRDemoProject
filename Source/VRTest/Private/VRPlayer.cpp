@@ -15,6 +15,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraComponent.h"
 #include "NiagaraDataInterfaceArrayFunctionLibrary.h"
+#include "UMG/Public/Components/WidgetInteractionComponent.h"
 
 #define PRINTToScreen(msg) (GEngine->AddOnScreenDebugMessage(0, 1, FColor::Red, *msg))
 
@@ -48,6 +49,9 @@ AVRPlayer::AVRPlayer()
 	RightAim = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightAim"));
 	RightAim->SetupAttachment(RootComponent);
 	RightAim->SetTrackingMotionSource(FName("RightAim"));
+
+	WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
+	WidgetInteractionComp->SetupAttachment(RightAim);
 }
 
 // Called when the game starts or when spawned
@@ -203,6 +207,11 @@ void AVRPlayer::DrawCrosshair()
 
 void AVRPlayer::FireInput(const FInputActionValue& values)
 {
+	if (WidgetInteractionComp)
+	{
+		WidgetInteractionComp->PressPointerKey(FKey(TEXT("LeftMouseButton"))); 
+	}
+
 	FVector StartPos = RightAim->GetComponentLocation();
 	FVector EndPos = StartPos + RightAim->GetForwardVector() * 10000;
 	FHitResult hitInfo;
