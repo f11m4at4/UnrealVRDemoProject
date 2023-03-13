@@ -176,7 +176,20 @@ private: // Grab
 	// 물체 잡은 상태로 컨트롤 하기
 	void Grabbing();
 
+public: // Remote Grab
+	UPROPERTY(EditDefaultsOnly, Category="Grab")
+	bool IsRemoteGrab = true;
+	FTimerHandle GrabHandle;
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
 	class UWidgetInteractionComponent* WidgetInteractionComp;
+
+	// Release 상태로 되돌려놓기
+	void ReleaseUIInput();
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputMappingContext* IMC_Hand;
+
 };
