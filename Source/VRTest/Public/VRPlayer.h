@@ -159,7 +159,7 @@ private: // Grab
 	// 회전 힘
 	UPROPERTY(EditAnywhere, Category = "Grab", Meta = (AllowPrivateAccess = true))
 	float toquePower = 1500;
-
+	
 	// 이전위치
 	FVector prevPos;
 	// 이전회전
@@ -180,6 +180,15 @@ public: // Remote Grab
 	UPROPERTY(EditDefaultsOnly, Category="Grab")
 	bool IsRemoteGrab = true;
 	FTimerHandle GrabHandle;
+
+	// 원거리 물체 잡기 처리 함수
+	void RemoteGrab();
+
+	// Remote Grab 시각화 처리여부
+	UPROPERTY(EditAnywhere, Category="Grab")
+	bool IsDrawDebugRemoteGrab = true;
+	// Remote Grab 을 위한 디버그용 시각화 처리함수
+	void DrawDebugRemoteGrab();
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Widget")
